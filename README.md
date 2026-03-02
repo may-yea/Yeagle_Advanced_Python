@@ -5845,3 +5845,853 @@ for alignment in blast_record.alignments:
     || ||||||||    ||| | ||  |||| |||||||||||  |   ||  |  ||| |  ||||| | || |||...
     AAGATGGGGAGG---ATGGATTATCTGGCAATGAAAACTGACGATCAGGTTGCTGCTGACTTGATCAACTCTGAT
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Open CV
+
+```python
+# import numpy as np and matplotlib as plt
+
+import numpy as np
+import matplotlib.pyplot as plt
+%matplotlib inline
+```
+
+
+```python
+# import cv2
+
+import cv2
+```
+
+
+```python
+# read cv2 image
+
+img = cv2.imread("orchid.jpg")
+```
+
+
+```python
+# pull image type
+
+type(img)
+```
+
+
+
+
+    numpy.ndarray
+
+
+
+
+```python
+# code for wrong image
+
+img_wrong = cv2.imread('wrong/path/doesnot/abcdegh.jpg')
+```
+
+
+```python
+# pull wrong image type
+
+type(img_wrong)
+```
+
+
+
+
+    NoneType
+
+
+
+
+```python
+# pull (show) the image by plotting
+
+plt.imshow(img)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7fc0e00fefd0>
+
+
+
+
+![png](output_6_1.png)
+
+
+
+```python
+# notice the colors are not the same as the original image
+# because matplotlib expects a different order of collors (RGB) but opencv expects (BGR)
+# fix the image RGB->BGR
+
+fix_img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+```
+
+
+```python
+# show the fixed image
+
+plt.imshow(fix_img)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7fc0de586290>
+
+
+
+
+![png](output_8_1.png)
+
+
+
+```python
+# make the image gray and pull the shape
+
+img_gray = cv2.imread("orchid.jpg", cv2.IMREAD_GRAYSCALE)
+img_gray.shape
+```
+
+
+
+
+    (183, 196)
+
+
+
+
+```python
+# plot the gray image
+
+plt.imshow(img_gray)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7fc0de4fb490>
+
+
+
+
+![png](output_10_1.png)
+
+
+
+```python
+# transform and plot the image to grayscale
+
+plt.imshow(img_gray, cmap = "gray")
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7fc0de45ebd0>
+
+
+
+
+![png](output_11_1.png)
+
+
+
+```python
+# edit the dimensions of the fixed image and plot
+
+new_img = cv2.resize(fix_img, (1000,400))
+plt.imshow(new_img)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7fc0de452290>
+
+
+
+
+![png](output_12_1.png)
+
+
+
+```python
+# pull the new image shape
+
+new_img.shape
+```
+
+
+
+
+    (400, 1000, 3)
+
+
+
+
+```python
+# edit the width and height ratios of fixed image
+
+w_ratio = 0.5
+h_ratio = 0.5
+
+new_img = cv2.resize(fix_img, (0,0), fix_img, w_ratio, h_ratio)
+```
+
+
+```python
+# plot the new image
+
+plt.imshow(new_img)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7fc0dcba5f90>
+
+
+
+
+![png](output_15_1.png)
+
+
+
+```python
+# pull new image shape
+
+new_img.shape
+```
+
+
+
+
+    (92, 98, 3)
+
+
+
+
+```python
+# flip the fixed image vertically and plot
+
+flip_img = cv2.flip(fix_img, 0)
+plt.imshow(flip_img)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7fc0dcb97150>
+
+
+
+
+![png](output_17_1.png)
+
+
+
+```python
+# flip image vertically and horizontally and plot
+
+flip_img2 = cv2.flip(fix_img, -1)
+plt.imshow(flip_img2)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7fc0dcaf8950>
+
+
+
+
+![png](output_18_1.png)
+
+
+
+```python
+# pull the image type
+
+type(fix_img)
+```
+
+
+
+
+    numpy.ndarray
+
+
+
+
+```python
+# write in orchid fixed image
+
+cv2.imwrite('orchid_fixed_image.jpg', flip_img)
+```
+
+
+
+
+    True
+
+
+
+
+```python
+# plot original python coloring image
+
+plt.imshow(img)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7fc0dca664d0>
+
+
+
+
+![png](output_21_1.png)
+
+
+
+```python
+# fix the image color BGR->BGR as img1
+
+img1 = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+```
+
+
+```python
+# plot the color fixed image
+
+plt.imshow(img1)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7fc0dca523d0>
+
+
+
+
+![png](output_23_1.png)
+
+
+
+```python
+# convert BGR->HSV as img2
+
+img2 = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+```
+
+
+```python
+# plot image 2 hue, saturation, value
+
+plt.imshow(img2)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7fc0dc9b3a50>
+
+
+
+
+![png](output_25_1.png)
+
+
+
+```python
+# convert BGR image to HLS as img3
+
+img3 = cv2.cvtColor(img, cv2.COLOR_BGR2HLS)
+```
+
+
+```python
+# plot the HLS image
+
+plt.imshow(img3)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7fc0dc994ed0>
+
+
+
+
+![png](output_27_1.png)
+
+
+
+```python
+# read bumblebee image and orchid image
+
+img1 = cv2.imread('bumblebee.jpg')
+img2 = cv2.imread("orchid.jpg")
+```
+
+
+```python
+# plot the bumblebee image
+
+plt.imshow(img1)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7fc0dc8ff790>
+
+
+
+
+![png](output_29_1.png)
+
+
+
+```python
+# convert the images colors to original
+
+img1 = cv2.cvtColor(img1, cv2.COLOR_BGR2RGB)
+img2 = cv2.cvtColor(img2, cv2.COLOR_BGR2RGB)
+```
+
+
+```python
+# replot img1 with converted color
+
+plt.imshow(img1)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7fc0dc863d10>
+
+
+
+
+![png](output_31_1.png)
+
+
+
+```python
+# plot img2 with converted color
+
+plt.imshow(img2)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7fc0dc84de10>
+
+
+
+
+![png](output_32_1.png)
+
+
+
+```python
+# resizes images one and two
+
+img1 = cv2.resize(img1, (1200, 1200))
+img2 = cv2.resize(img2, (1200, 1200))
+```
+
+
+```python
+# give the two images equivalent weight
+
+alpha = 0.5
+beta = 0.5
+```
+
+
+```python
+# blend the two images together 50% and 50%
+
+blended = cv2.addWeighted(img1, alpha, img2, beta, gamma = 0)
+```
+
+
+```python
+# plot the blended image
+
+plt.imshow(blended)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7fc0dc399fd0>
+
+
+
+
+![png](output_36_1.png)
+
+
+
+```python
+# edit the weight ratios of the two images and plot
+
+alpha = 0.75
+beta = 0.25
+
+blended1 = cv2.addWeighted(img1, alpha, img2, beta, 0)
+plt.imshow(blended1)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7fc0dc3049d0>
+
+
+
+
+![png](output_37_1.png)
+
+
+
+```python
+# read two images, convert them to original color, and shrink one
+
+img1 = cv2.imread('bumblebee.jpg')
+img2 = cv2.imread('orchid.jpg')
+
+img1 = cv2.cvtColor(img1, cv2.COLOR_BGR2RGB)
+img2 = cv2.cvtColor(img2, cv2.COLOR_BGR2RGB)
+
+img1 = cv2.resize(img1, (100, 100))
+```
+
+
+```python
+# set parameters for large image and small images and plot
+
+large_img = img2
+small_img = img1
+
+x_offset = 0
+y_offset = 0
+
+x_end = x_offset + small_img.shape[1]
+y_end = y_offset + small_img.shape[0]
+
+large_img[y_offset:y_end, x_offset:x_end] = small_img
+
+plt.imshow(large_img)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7fc0dc2efcd0>
+
+
+
+
+![png](output_39_1.png)
+
+
+
+```python
+# save and upload rainbow.jpg from chapter three
+
+# https://github.com/worklifesg/Python-for-Computer-Vision-with-OpenCV-and-Deep-Learning
+```
+
+
+```python
+# read rainbow image
+
+img = cv2.imread('rainbow.jpg')
+```
+
+
+```python
+# plot rainbow image
+
+plt.imshow(img)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7fc0dc776d90>
+
+
+
+
+![png](output_42_1.png)
+
+
+
+```python
+# cancel out background colors
+
+img = cv2.imread('rainbow.jpg', 0)
+```
+
+
+```python
+# plot the gray (background cancelled) image
+
+plt.imshow(img, cmap = 'gray')
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7fc0dc6e81d0>
+
+
+
+
+![png](output_44_1.png)
+
+
+
+```python
+# return threshold one define make binary image
+
+ret1, thresh1 = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)
+```
+
+
+```python
+# pull ret1
+
+ret1
+```
+
+
+
+
+    127.0
+
+
+
+
+```python
+# plot the binary image
+
+plt.imshow(thresh1, cmap = "gray")
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7fc0dc6c7ad0>
+
+
+
+
+![png](output_47_1.png)
+
+
+
+```python
+# read rainbow image as img2, return adaptive threshold, plot image
+
+img2 = cv2.imread('rainbow.jpg', 0)
+ret1, thresh1 = cv2.threshold(img2, 127, 255, cv2.THRESH_TRUNC)
+plt.imshow(thresh1, cmap = "gray")
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7fc0dc62ae50>
+
+
+
+
+![png](output_48_1.png)
+
+
+
+```python
+# read rainbow image as img3, return threshold, plot
+
+img3 = cv2.imread('rainbow.jpg', 0)
+ret1, thresh1 = cv2.threshold(img3, 127, 255, cv2.THRESH_TOZERO)
+plt.imshow(thresh1, cmap = "gray")
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7fc0dc60ed90>
+
+
+
+
+![png](output_49_1.png)
+
+
+
+```python
+# read panda jpg and plot image grayscale
+
+img_r = cv2.imread('panda.jpg', 0)
+plt.imshow(img_r, cmap = 'gray')
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7fc0dc5709d0>
+
+
+
+
+![png](output_50_1.png)
+
+
+
+```python
+# make a function to display images the way we want
+
+def show_pic(img):
+    fig = plt.figure(figsize = (15,15))
+    ax = fig.add_subplot(111)
+    ax.imshow(img, cmap = 'gray')
+```
+
+
+```python
+# show image adjusted
+
+show_pic(img_r)
+```
+
+
+![png](output_52_0.png)
+
+
+
+```python
+# keep all black text and gray text and turn it into only  black/white
+
+ret, th1 = cv2.threshold(img_r, 127, 255, cv2.THRESH_BINARY)
+show_pic(th1)
+```
+
+
+![png](output_53_0.png)
+
+
+
+```python
+# adjusting the black/white ratio
+
+ret, th1 = cv2.threshold(img_r, 200, 255, cv2.THRESH_BINARY)
+show_pic(th1)
+```
+
+
+![png](output_54_0.png)
+
+
+
+```python
+# trying different techniques to get better results for b/w (applying adaptive threshold)
+
+th2 = cv2.adaptiveThreshold(img_r, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 11, 8)
+```
+
+
+```python
+# show picture with adaptive threshold applied
+
+show_pic(th2)
+```
+
+
+![png](output_56_0.png)
+
+
+
+```python
+# blend th1 and th2 together (weighted) and show image
+# layer th2 underneath th1
+
+blended = cv2.addWeighted(th1, 0.2, th2, 0.8, 0.0)
+show_pic(blended)
+```
+
+
+![png](output_57_0.png)
+
+
+
+```python
+# define th3 with the adaptive threshold, blend it, show it
+
+th3 = cv2.adaptiveThreshold(img_r, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 11, 8)
+
+blended = cv2.addWeighted(th1, 0.6, th2, 0.4, 0.0)
+show_pic(blended)
+```
+
+
+![png](output_58_0.png)
+
+
+
+```python
+
+```
+
+
+```python
+
+```
