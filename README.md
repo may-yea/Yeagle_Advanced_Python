@@ -6687,11 +6687,968 @@ show_pic(blended)
 
 
 
-```python
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Corner Detection
+
+```python
+# import the following packages
+
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+%matplotlib inline
 ```
 
 
 ```python
+# read green chess board, convert color, and plot
 
+flat_chess = cv2.imread('green_chess.png')
+flat_chess = cv2.cvtColor(flat_chess, cv2.COLOR_BGR2RGB)
+plt.imshow(flat_chess)
 ```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7f41ea028690>
+
+
+
+
+![png](output_1_1.png)
+
+
+
+```python
+# define gray flat chess, change color to b/w, plot
+
+gray_flat_chess = cv2.cvtColor(flat_chess, cv2.COLOR_BGR2GRAY)
+plt.imshow((gray_flat_chess), cmap = "gray")
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7f41e9f53690>
+
+
+
+
+![png](output_2_1.png)
+
+
+
+```python
+# read chessboard into real chess and change the color to original
+
+real_chess = cv2.imread("chessboard.jpg")
+real_chess = cv2.cvtColor(real_chess, cv2.COLOR_BGR2RGB)
+```
+
+
+```python
+# plot the original chessboard color
+
+plt.imshow(real_chess)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7f41e9f40490>
+
+
+
+
+![png](output_4_1.png)
+
+
+
+```python
+# convert the color to b/w and plot
+
+gray_real_chess = cv2.cvtColor(real_chess, cv2.COLOR_BGR2RGB)
+plt.imshow(gray_real_chess)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7f41e9ec3190>
+
+
+
+
+![png](output_5_1.png)
+
+
+
+```python
+# create dst command
+
+gray = np.float32(gray_flat_chess)
+dst = cv2.cornerHarris(src = gray, blockSize = 2, ksize = 3, k = 0.04)
+dst = cv2.dilate(dst, None)
+```
+
+
+```python
+# give the corners red dots
+
+flat_chess[dst>0.01*dst.max()] = [255,0,0]
+    
+plt.imshow(flat_chess)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7f41e9e30cd0>
+
+
+
+
+![png](output_7_1.png)
+
+
+
+```python
+# introduce noise by trying this with the real chessboard
+
+gray_real_chess = cv2.cvtColor(real_chess, cv2.COLOR_BGR2GRAY)  # Step 1: make it 1 channel
+gray = np.float32(gray_real_chess)                               # Step 2: convert to float32
+dst = cv2.cornerHarris(src=gray, blockSize=2, ksize=3, k=0.04)
+dst = cv2.dilate(dst, None)
+
+real_chess[dst > 0.01 * dst.max()] = [255, 0, 0]
+plt.imshow(real_chess)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7f41e855c150>
+
+
+
+
+![png](output_8_1.png)
+
+
+
+```python
+# Shi-Tamasi Corner Detection
+
+corners = cv2.goodFeaturesToTrack(gray_flat_chess, 64, 0.01, 10)
+```
+
+
+```python
+# another way of reddening the corners starting with the flat chess
+
+corners = np.int0(corners)
+
+for i in corners:
+    x,y = i.ravel()
+    cv2.circle(flat_chess, (x,y),3,(255,0,0), -1)
+    
+plt.imshow(flat_chess)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7f41e84cc5d0>
+
+
+
+
+![png](output_10_1.png)
+
+
+
+```python
+# overlapping and making corrections
+
+corners = cv2.goodFeaturesToTrack(gray_real_chess, 100, 0.01, 10)
+
+corners = np.int0(corners)
+
+for i in corners:
+    x,y = i.ravel()
+    cv2.circle(real_chess, (x,y), 3, (0,255,0), -1)
+    
+plt.imshow(real_chess)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7f41e84b0190>
+
+
+
+
+![png](output_11_1.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Edge Detection
+
+```python
+# import cv2
+
+import cv2
+```
+
+
+```python
+# import numpy as np
+
+import numpy as np
+```
+
+
+```python
+# import pyplot as ply
+
+import matplotlib.pyplot as plt
+%matplotlib inline
+```
+
+
+```python
+# identify img and plot
+
+img = cv2.imread("orchid.jpg")
+plt.imshow(img)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7fcf7652dfd0>
+
+
+
+
+![png](output_3_1.png)
+
+
+
+```python
+# identify edges and plot edge detection
+
+edges = cv2.Canny(image =img, threshold1 = 127, threshold2 = 127)
+
+plt.imshow(edges)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7fcf76460d50>
+
+
+
+
+![png](output_4_1.png)
+
+
+
+```python
+# 138 is our median color value and is not near half of 255
+
+med_value = np.median(img)
+med_value
+```
+
+
+
+
+    138.0
+
+
+
+
+```python
+# edit lower and upper thresholds
+
+lower = int(max(0, 0.75*med_value))
+upper = int(min(255, 1.5*med_value))
+
+edges = cv2.Canny(img, threshold1 = lower, threshold2 = upper)
+
+plt.imshow(edges)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7fcf743df390>
+
+
+
+
+![png](output_6_1.png)
+
+
+
+```python
+# a different method of editing thresholds
+
+lower = int(max(0, 0.7*med_value))
+upper = int(min(255,1.3*med_value))
+
+edges = cv2.Canny(img, threshold1 = lower, threshold2 = upper)
+
+plt.imshow(edges)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7fcf74342950>
+
+
+
+
+![png](output_7_1.png)
+
+
+
+```python
+# continue cleaning up the image
+
+edges = cv2.Canny(image = img, threshold1 = lower, threshold2 = upper +100)
+
+plt.imshow(edges)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7fcf743259d0>
+
+
+
+
+![png](output_8_1.png)
+
+
+
+```python
+# another method of cleaning up the edges (looks like two many lines have been removed)
+
+blurred_img = cv2.blur(img, ksize = (7,7))
+
+edges = cv2.Canny(image=blurred_img,
+                 threshold1 = lower,
+                 threshold2 = upper)
+plt.imshow(edges)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7fcf742951d0>
+
+
+
+
+![png](output_9_1.png)
+
+
+
+```python
+# overly "cleaned up" image
+
+blurred_img = cv2.blur(img, ksize = (5,5))
+
+edges = cv2.Canny(image=blurred_img,
+                 threshold1 = lower,
+                 threshold2 = upper +100)
+plt.imshow(edges)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7fcf741f9790>
+
+
+
+
+![png](output_10_1.png)
+
+
+
+```python
+# my favorite image after playing around with it:
+
+blurred_img = cv2.blur(img, ksize = (1,1))
+
+edges = cv2.Canny(image=blurred_img,
+                 threshold1 = lower +50,
+                 threshold2 = upper +50)
+plt.imshow(edges)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7fcf741dfcd0>
+
+
+
+
+![png](output_11_1.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Feature Matching
+
+```python
+# import the following functions
+
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+%matplotlib inline
+```
+
+
+```python
+# make the display filter gray, plot the figure, add subplot
+
+def display(img,cmap='gray'):
+    fig = plt.figure(figsize=(12, 10))
+    ax = fig.add_subplot(111)
+    ax.imshow(img,cmap='gray')
+```
+
+
+```python
+# define frosted flakes and display (in gray)
+
+flakes = cv2.imread("flakes.jpg", 0)
+display(flakes)
+```
+
+
+![png](output_2_0.png)
+
+
+
+```python
+# define cereals and display
+
+cereals = cv2.imread('cereals.jpg', 0)
+display(cereals)
+```
+
+
+![png](output_3_0.png)
+
+
+
+```python
+# define orb, kp, des
+
+orb = cv2.ORB_create()
+
+kp1,des1 = orb.detectAndCompute(flakes, mask=None)
+kp2,des2 = orb.detectAndCompute(cereals, mask=None)
+```
+
+
+```python
+# use brute force, define bf
+
+bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck = True)
+matches= bf.match(des1, des2)
+```
+
+
+```python
+# define matches
+
+matches = sorted(matches, key = lambda x:x.distance)
+```
+
+
+```python
+# define frosted flakes matches
+
+flakes_matches = cv2.drawMatches(flakes, kp1, cereals, kp2, matches[:25], None, flags = 2)
+```
+
+
+```python
+# display frosted flakes
+
+display(flakes_matches)
+```
+
+
+![png](output_8_0.png)
+
+
+
+```python
+# create a sifting function
+
+sift = cv2.SIFT_create()
+```
+
+
+```python
+# define terms
+
+kp1, des1 = sift.detectAndCompute(flakes, None)
+kp2, des2 = sift.detectAndCompute(cereals, None)
+```
+
+
+```python
+# define bf brute force matcher
+
+bf = cv2.BFMatcher()
+matches = bf.knnMatch(des1, des2, k=2)
+```
+
+
+```python
+# define good and conditions
+
+good = []
+
+for match1, match2 in matches:
+    if match1.distance < 0.75 * match2.distance:
+        good.append([match1])
+```
+
+
+```python
+# print the lengths of the matches and goods
+
+print('Length of total matches:', len(matches))
+print('Length of good matches:', len(good))
+```
+
+    Length of total matches: 694
+    Length of good matches: 27
+
+
+
+```python
+# apply the sift matches characteristics and display
+
+sift_matches = cv2.drawMatchesKnn(flakes, kp1, cereals, kp2, good, None, flags =2)
+display(sift_matches)
+```
+
+
+![png](output_14_0.png)
+
+
+
+```python
+# recreate the sift and redfine terms
+
+sift = cv2.SIFT_create()
+
+kp1, des1 = sift.detectAndCompute(flakes, None)
+kp2, des2 = sift.detectAndCompute(cereals, None)
+```
+
+
+```python
+# set index and parameters 
+
+flann_index_KDtree = 0
+index_params = dict(algorithm=flann_index_KDtree, trees = 5)
+search_params = dict(checks=50)
+```
+
+
+```python
+# set matches and good term rules
+
+flann = cv2.FlannBasedMatcher(index_params, search_params)
+
+matches = flann.knnMatch(des1, des2, k=2)
+
+good = []
+
+for match1, match2, in matches:
+    if match1.distance < 0.75*match2.distance:
+        good.append([match1])
+```
+
+
+```python
+# describe flann matches
+
+flann_matches = cv2.drawMatchesKnn(flakes, kp1, cereals, kp2, good, None, flags = 0)
+display(flann_matches)
+```
+
+
+![png](output_18_0.png)
+
+
+
+```python
+# redefine sift and terms
+
+sifts = cv2.SIFT_create()
+
+kp1, des1 = sift.detectAndCompute(flakes, None)
+kp2, des2 = sift.detectAndCompute(cereals, None)
+```
+
+
+```python
+# reset index and parameters 
+
+flann_index_KDtree = 0
+index_params = dict(algorithm=flann_index_KDtree, trees = 5)
+search_params = dict(checks=50)
+```
+
+
+```python
+# reset matches and good term rules
+
+flann = cv2.FlannBasedMatcher(index_params, search_params)
+
+matches = flann.knnMatch(des1, des2, k=2)
+```
+
+
+```python
+# 0,0 means pure black will be added
+
+matchesMask = [[0,0] for i in range(len(matches))]
+```
+
+
+```python
+# define match rules, draw parameters
+
+for i, (match1, match2) in enumerate(matches):
+    if match1.distance < 0.75*match2.distance:
+        matchesMask[i] = [1,0]
+        
+draw_params = dict(matchColor = (0,255,0),
+                  singlePointColor = (255,0,0),
+                  matchesMask = matchesMask,
+                  flags = 0)
+```
+
+
+```python
+# define flann matches, display flann matches
+
+flann_matches = cv2.drawMatchesKnn(flakes, kp1, cereals, kp2, matches, None, **draw_params)
+
+display(flann_matches)
+```
+
+
+![png](output_24_0.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Object Detection
+
+```python
+# import the following 
+
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+```
+
+
+```python
+# inline matplotlib
+
+%matplotlib inline
+```
+
+
+```python
+# read the image, convert colors, and plot
+
+training = cv2.imread('sunflower.jpg')
+training = cv2.cvtColor(training, cv2.COLOR_BGR2RGB)
+plt.imshow(training)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7fcd75345210>
+
+
+
+
+![png](output_2_1.png)
+
+
+
+```python
+# read, convert, plot
+
+testing = cv2.imread('sunflowers.jpg')
+testing = cv2.cvtColor(testing, cv2.COLOR_BGR2RGB)
+plt.imshow(testing)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7fcd752f9710>
+
+
+
+
+![png](output_3_1.png)
+
+
+
+```python
+# print the shapes of each image
+
+print('training image shape:', training.shape)
+print('testing image shape:', testing.shape)
+```
+
+    training image shape: (225, 225, 3)
+    testing image shape: (1632, 1864, 3)
+
+
+
+```python
+# define methods
+
+methods = ['cv2.TM_CCOEFF', 'cv2.TM_CCOEFF_NORMED', 'cv2.TM_CCORR', 'cv2.TM_CCORR_NORMED', 'cv2.TM_SQDIFF', 'cv2.TM_SQDIFF_NORMED']
+```
+
+
+```python
+# apply the methods, define template matching, draw the rectangle with defined terms
+# plot all the methods with titles, print so that the images are spaced out
+
+for m in methods:
+    
+    testing_copy = testing.copy()
+    method = eval(m)
+
+    res = cv2.matchTemplate(testing_copy, training, method)
+
+    min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
+
+    if method in [cv2.TM_SQDIFF, cv2.TM_SQDIFF_NORMED]:
+        top_left = min_loc
+    else:
+        top_left = max_loc
+
+    height, width, channels = training.shape
+    bottom_right = (top_left[0] + width, top_left[1] + height)
+
+    cv2.rectangle(testing_copy, top_left, bottom_right, (255,0,0),10)
+
+    plt.subplot(121)
+    plt.imshow(res)
+    plt.title("Heatmap of template matching")
+    plt.subplot(122)
+    plt.imshow(testing_copy)
+    plt.title('Detection of template')
+
+    plt.suptitle(m)
+
+    plt.show()
+    print('\n')
+    print('\n')
+```
+
+
+![png](output_6_0.png)
+
+
+    
+    
+    
+    
+
+
+
+![png](output_6_2.png)
+
+
+    
+    
+    
+    
+
+
+
+![png](output_6_4.png)
+
+
+    
+    
+    
+    
+
+
+
+![png](output_6_6.png)
+
+
+    
+    
+    
+    
+
+
+
+![png](output_6_8.png)
+
+
+    
+    
+    
+    
+
+
+
+![png](output_6_10.png)
+
+
