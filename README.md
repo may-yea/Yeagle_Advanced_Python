@@ -1177,10 +1177,6 @@ translate(my_string)
 
 
 
-```python
-
-```
-
 
 
 
@@ -2370,10 +2366,6 @@ print("%s %i %i %i %i" % (rc.id, len(rc), len(rc.features), len(rc.dbxrefs), len
     Testing 9609 41 0 0
 
 
-
-```python
-
-```
 
 
 
@@ -3660,34 +3652,7 @@ SeqIO.write(records, "rev_comp.fasta", "fasta")
 
 
 
-```python
 
-```
-
-
-```python
-
-```
-
-
-```python
-
-```
-
-
-```python
-
-```
-
-
-```python
-
-```
-
-
-```python
-
-```
 
 
 
@@ -5875,6 +5840,293 @@ for alignment in blast_record.alignments:
 
 
 
+## Challenge
+
+```python
+# Import enviromental functions
+
+from Bio.Blast import NCBIWWW
+from Bio.Blast import NCBIXML
+from Bio import SeqIO
+```
+
+
+```python
+# Read MYC cancer gene FASTA file, ID, and Length
+
+record = SeqIO.read("MYC.fasta", "fasta")
+print(f"ID: {record.id}")
+print(f"Length: {len(record.seq)} bp")
+```
+
+    ID: NM_002467.6
+    Length: 3721 bp
+
+
+
+```python
+# Run BLAST sequence against chimpanzee
+
+result_handle = NCBIWWW.qblast("blastn", "nt", record.seq, entrez_query="Pan troglodytes[Organism]")
+```
+
+
+```python
+# Save the BLAST result
+
+with open("MYC_chimp_blast.xml", "w") as out_handle:
+    out_handle.write(result_handle.read())
+    
+print("BLAST result saved!")
+```
+
+    BLAST result saved!
+
+
+
+```python
+# Parse and extract E-Values
+
+with open("MYC_chimp_blast.xml") as result_handle:
+    blast_records = NCBIXML.parse(result_handle)
+    blast_record = next(blast_records)
+    
+print(f"{'Hit Description' : <60} {'E-Value'}")
+print("-" * 75)
+
+for alignment in blast_record.alignments:
+    for hsp in alignment.hsps:
+        print(f"{alignment.title[:60]:<60} {hsp.expect}")
+```
+
+    Hit Description                                              E-Value
+    ---------------------------------------------------------------------------
+    gi|2884342664|ref|NM_001142794.2| Pan troglodytes MYC proto- 0.0
+    gi|176652|gb|M38057.1|CHPCMYC Chimpanzee c-myc proto-oncogen 0.0
+    gi|176652|gb|M38057.1|CHPCMYC Chimpanzee c-myc proto-oncogen 0.0
+    gi|176652|gb|M38057.1|CHPCMYC Chimpanzee c-myc proto-oncogen 0.0
+    gi|124111162|gb|DQ977348.1| Pan troglodytes MYC (MYC) gene,  0.0
+    gi|124111162|gb|DQ977348.1| Pan troglodytes MYC (MYC) gene,  0.0
+    gi|22653049|gb|AF519445.1| Pan troglodytes c-myc proto-oncog 0.0
+    gi|2697838216|ref|XR_010159674.1| PREDICTED: Pan troglodytes 2.73844e-18
+    gi|2697711663|ref|XM_063789281.1| PREDICTED: Pan troglodytes 6.03181e-14
+    gi|2697711663|ref|XM_063789281.1| PREDICTED: Pan troglodytes 5.64933e-08
+    gi|2697711663|ref|XM_063789281.1| PREDICTED: Pan troglodytes 2.92642e-05
+    gi|2468597851|ref|XM_009442027.4| PREDICTED: Pan troglodytes 6.03181e-14
+    gi|2697711660|ref|XM_009442026.5| PREDICTED: Pan troglodytes 6.03181e-14
+    gi|2697711660|ref|XM_009442026.5| PREDICTED: Pan troglodytes 5.64933e-08
+    gi|2697711660|ref|XM_009442026.5| PREDICTED: Pan troglodytes 2.92642e-05
+    gi|2697711661|ref|XM_063789280.1| PREDICTED: Pan troglodytes 6.03181e-14
+    gi|2697711661|ref|XM_063789280.1| PREDICTED: Pan troglodytes 5.64933e-08
+    gi|2697711661|ref|XM_063789280.1| PREDICTED: Pan troglodytes 2.92642e-05
+    gi|2697761507|ref|XM_016959814.4| PREDICTED: Pan troglodytes 1.32859e-09
+    gi|2697761507|ref|XM_016959814.4| PREDICTED: Pan troglodytes 0.052911
+    gi|2468759376|ref|XM_054676466.1| PREDICTED: Pan troglodytes 2.40215e-06
+    gi|2468759376|ref|XM_054676466.1| PREDICTED: Pan troglodytes 7.85268
+    gi|110189733|gb|AC184055.3| Pan troglodytes BAC clone CH251- 0.0151592
+    gi|213688466|gb|AC216066.3| Pan troglodytes BAC clone CH251- 0.0151592
+    gi|84875726|gb|AC163767.4| Pan troglodytes BAC clone CH251-1 0.052911
+    gi|89112052|gb|AC160055.2| Pan troglodytes BAC clone CH251-5 0.052911
+    gi|95147531|gb|AC186369.1| Pan troglodytes chromosome UNKNOW 0.052911
+    gi|145864600|gb|AC193774.2| Pan troglodytes BAC clone CH251- 0.052911
+    gi|2697734997|ref|XM_016927670.4| PREDICTED: Pan troglodytes 0.052911
+    gi|2697735002|ref|XM_063795124.1| PREDICTED: Pan troglodytes 0.052911
+    gi|1607240196|gb|AC279135.1| Pan troglodytes chromosome 22 c 0.184677
+    gi|119855459|gb|AC192928.2| Pan troglodytes BAC clone CH251- 0.184677
+    gi|190610218|gb|AC215525.4| Pan troglodytes BAC clone CH251- 0.184677
+    gi|46391240|gb|AC146383.4| Pan troglodytes BAC clone RP43-12 0.184677
+    gi|126215653|gb|AC190187.4| Pan troglodytes BAC clone CH251- 0.184677
+    gi|46391264|gb|AC146220.3| Pan troglodytes BAC clone RP43-27 0.184677
+    gi|2697697177|ref|XR_010148674.1| PREDICTED: Pan troglodytes 0.184677
+    gi|83776714|gb|AC147314.4| Pan troglodytes BAC clone RP43-50 0.184677
+    gi|144226776|gb|AC194657.3| Pan troglodytes BAC clone CH251- 0.644588
+    gi|2697713566|ref|XM_009442616.5| PREDICTED: Pan troglodytes 0.644588
+    gi|2697713562|ref|XM_016948680.4| PREDICTED: Pan troglodytes 0.644588
+    gi|2697713545|ref|XM_016948673.4| PREDICTED: Pan troglodytes 0.644588
+    gi|1880404699|gb|AC280249.1| Pan troglodytes chromosome unkn 0.644588
+    gi|2697713560|ref|XM_016948679.4| PREDICTED: Pan troglodytes 0.644588
+    gi|2697713548|ref|XM_016948675.4| PREDICTED: Pan troglodytes 0.644588
+    gi|2697713551|ref|XM_063789757.1| PREDICTED: Pan troglodytes 0.644588
+    gi|2697713570|ref|XM_063789762.1| PREDICTED: Pan troglodytes 0.644588
+    gi|2697713567|ref|XM_009442617.5| PREDICTED: Pan troglodytes 0.644588
+    gi|2697713549|ref|XM_016948676.4| PREDICTED: Pan troglodytes 0.644588
+    gi|1603830845|gb|AC278915.1| Pan troglodytes chromosome 17 c 0.644588
+    gi|2697713561|ref|XM_054678472.2| PREDICTED: Pan troglodytes 0.644588
+    gi|2697713554|ref|XM_063789758.1| PREDICTED: Pan troglodytes 0.644588
+    gi|2697713558|ref|XM_063789760.1| PREDICTED: Pan troglodytes 0.644588
+    gi|2697713568|ref|XM_054678474.2| PREDICTED: Pan troglodytes 0.644588
+    gi|2697713569|ref|XM_054678475.2| PREDICTED: Pan troglodytes 0.644588
+    gi|2697713550|ref|XM_054678471.2| PREDICTED: Pan troglodytes 0.644588
+    gi|2697713563|ref|XM_063789761.1| PREDICTED: Pan troglodytes 0.644588
+    gi|2697713565|ref|XM_054678473.2| PREDICTED: Pan troglodytes 0.644588
+    gi|2697713556|ref|XM_063789759.1| PREDICTED: Pan troglodytes 0.644588
+    gi|2697713546|ref|XM_063789756.1| PREDICTED: Pan troglodytes 0.644588
+    gi|2697713553|ref|XM_016948678.4| PREDICTED: Pan troglodytes 0.644588
+
+
+
+```python
+# Define signifigance threshold filter and print Hit, E-Value, Score, ID
+
+E_VALUE_THRESHOLD = 0.05
+
+print("Significant hits (E < 0.05):\n")
+for alignment in blast_record.alignments:
+    for hsp in alignment.hsps:
+        if hsp.expect < E_VALUE_THRESHOLD:
+            print(f"Hit: {alignment.title[:60]}")
+            print(f"E-Value: {hsp.expect}")
+            print(f"Score: {hsp.score}")
+            print(f"Identity: {hsp.identities}/{hsp.align_length}")
+            print()
+```
+
+    Significant hits (E < 0.05):
+    
+    Hit: gi|2884342664|ref|NM_001142794.2| Pan troglodytes MYC proto-
+    E-Value: 0.0
+    Score: 4364.0
+    Identity: 2200/2211
+    
+    Hit: gi|176652|gb|M38057.1|CHPCMYC Chimpanzee c-myc proto-oncogen
+    E-Value: 0.0
+    Score: 2827.0
+    Identity: 1424/1431
+    
+    Hit: gi|176652|gb|M38057.1|CHPCMYC Chimpanzee c-myc proto-oncogen
+    E-Value: 0.0
+    Score: 1542.0
+    Identity: 774/776
+    
+    Hit: gi|176652|gb|M38057.1|CHPCMYC Chimpanzee c-myc proto-oncogen
+    E-Value: 0.0
+    Score: 776.0
+    Identity: 391/393
+    
+    Hit: gi|124111162|gb|DQ977348.1| Pan troglodytes MYC (MYC) gene, 
+    E-Value: 0.0
+    Score: 1537.0
+    Identity: 773/776
+    
+    Hit: gi|124111162|gb|DQ977348.1| Pan troglodytes MYC (MYC) gene, 
+    E-Value: 0.0
+    Score: 1295.0
+    Identity: 652/655
+    
+    Hit: gi|22653049|gb|AF519445.1| Pan troglodytes c-myc proto-oncog
+    E-Value: 0.0
+    Score: 949.0
+    Identity: 476/477
+    
+    Hit: gi|2697838216|ref|XR_010159674.1| PREDICTED: Pan troglodytes
+    E-Value: 2.73844e-18
+    Score: 111.0
+    Identity: 60/63
+    
+    Hit: gi|2697711663|ref|XM_063789281.1| PREDICTED: Pan troglodytes
+    E-Value: 6.03181e-14
+    Score: 94.0
+    Identity: 158/228
+    
+    Hit: gi|2697711663|ref|XM_063789281.1| PREDICTED: Pan troglodytes
+    E-Value: 5.64933e-08
+    Score: 73.0
+    Identity: 53/64
+    
+    Hit: gi|2697711663|ref|XM_063789281.1| PREDICTED: Pan troglodytes
+    E-Value: 2.92642e-05
+    Score: 63.0
+    Identity: 42/49
+    
+    Hit: gi|2468597851|ref|XM_009442027.4| PREDICTED: Pan troglodytes
+    E-Value: 6.03181e-14
+    Score: 94.0
+    Identity: 158/228
+    
+    Hit: gi|2697711660|ref|XM_009442026.5| PREDICTED: Pan troglodytes
+    E-Value: 6.03181e-14
+    Score: 94.0
+    Identity: 158/228
+    
+    Hit: gi|2697711660|ref|XM_009442026.5| PREDICTED: Pan troglodytes
+    E-Value: 5.64933e-08
+    Score: 73.0
+    Identity: 53/64
+    
+    Hit: gi|2697711660|ref|XM_009442026.5| PREDICTED: Pan troglodytes
+    E-Value: 2.92642e-05
+    Score: 63.0
+    Identity: 42/49
+    
+    Hit: gi|2697711661|ref|XM_063789280.1| PREDICTED: Pan troglodytes
+    E-Value: 6.03181e-14
+    Score: 94.0
+    Identity: 158/228
+    
+    Hit: gi|2697711661|ref|XM_063789280.1| PREDICTED: Pan troglodytes
+    E-Value: 5.64933e-08
+    Score: 73.0
+    Identity: 53/64
+    
+    Hit: gi|2697711661|ref|XM_063789280.1| PREDICTED: Pan troglodytes
+    E-Value: 2.92642e-05
+    Score: 63.0
+    Identity: 42/49
+    
+    Hit: gi|2697761507|ref|XM_016959814.4| PREDICTED: Pan troglodytes
+    E-Value: 1.32859e-09
+    Score: 78.0
+    Identity: 54/64
+    
+    Hit: gi|2468759376|ref|XM_054676466.1| PREDICTED: Pan troglodytes
+    E-Value: 2.40215e-06
+    Score: 67.0
+    Identity: 41/46
+    
+    Hit: gi|110189733|gb|AC184055.3| Pan troglodytes BAC clone CH251-
+    E-Value: 0.0151592
+    Score: 53.0
+    Identity: 47/60
+    
+    Hit: gi|213688466|gb|AC216066.3| Pan troglodytes BAC clone CH251-
+    E-Value: 0.0151592
+    Score: 52.0
+    Identity: 46/58
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ## Open CV
@@ -5951,7 +6203,7 @@ plt.imshow(img)
 
 
 
-![png](output_6_1.png)
+![png](report_files/output_6_1.png)
 
 
 
@@ -7650,6 +7902,7 @@ for m in methods:
 
 
 ![png](output_6_10.png)
+
 
 
 
