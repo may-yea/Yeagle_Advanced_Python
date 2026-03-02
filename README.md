@@ -6204,7 +6204,7 @@ plt.imshow(img)
 
 
 ![png](report_files/output_6_1.png)
-
+![test](./output_6_1.png)
 
 
 ```python
@@ -7902,6 +7902,7 @@ for m in methods:
 
 
 ![png](output_6_10.png)
+
 
 
 
