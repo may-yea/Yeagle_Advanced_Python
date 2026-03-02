@@ -6203,8 +6203,8 @@ plt.imshow(img)
 
 
 
-![png](report_files/output_6_1.png)
-![test](./output_6_1.png)
+<img width="273" height="252" alt="output_6_1" src="https://github.com/user-attachments/assets/9ca3b382-758e-411e-97a4-5ef45c2d161d" />
+
 
 
 ```python
@@ -7902,6 +7902,7 @@ for m in methods:
 
 
 ![png](output_6_10.png)
+
 
 
 
