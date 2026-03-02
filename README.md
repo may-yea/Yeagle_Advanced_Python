@@ -1,7 +1,7 @@
 # Yeagle_Advanced_Python
 
 
-# Sequence Objects
+## Sequence Objects
 
 ```python
 # Load Biopython package
@@ -1213,7 +1213,7 @@ translate(my_string)
 
 
 
-# Sequence Annotation
+## Sequence Annotation
 
 ```python
 # Import the sequence record
@@ -2407,7 +2407,7 @@ print("%s %i %i %i %i" % (rc.id, len(rc), len(rc.features), len(rc.dbxrefs), len
 
 
 
-# Sequence Input/Output
+## Sequence Input/Output
 
 ```python
 # Save and Upload this file as .gbk and .fasta
@@ -3721,7 +3721,7 @@ SeqIO.write(records, "rev_comp.fasta", "fasta")
 
 
 
-# Sequence Alignment
+## Sequence Alignment
 
 ```python
 # save and upload this file
@@ -5375,7 +5375,7 @@ aligner.score(target, query, strand = "+")
 
 
 
-# BLAST
+## BLAST
 
 ```python
 # import NCBIWWW from biopython package
@@ -5877,7 +5877,7 @@ for alignment in blast_record.alignments:
 
 
 
-# Open CV
+## Open CV
 
 ```python
 # import numpy as np and matplotlib as plt
@@ -6718,7 +6718,7 @@ show_pic(blended)
 
 
 
-# Corner Detection
+## Corner Detection
 
 ```python
 # import the following packages
@@ -6955,7 +6955,7 @@ plt.imshow(real_chess)
 
 
 
-# Edge Detection
+## Edge Detection
 
 ```python
 # import cv2
@@ -7198,7 +7198,7 @@ plt.imshow(edges)
 
 
 
-# Feature Matching
+## Feature Matching
 
 ```python
 # import the following functions
@@ -7484,7 +7484,7 @@ display(flann_matches)
 
 
 
-# Object Detection
+## Object Detection
 
 ```python
 # import the following 
@@ -7650,5 +7650,6 @@ for m in methods:
 
 
 ![png](output_6_10.png)
+
 
 
